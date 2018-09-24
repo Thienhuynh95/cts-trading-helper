@@ -1,0 +1,8 @@
+version: 1.0.0
+files:
+  - url: CTS-setup.exe
+    sha512: H0DruNcFdyQcSRQfaOT8JHDVCINyhkGOoIHNE8EDG+rDEl9pe7D4nVDcIScL8cIMtFO87sSa/ZcTg+dZZRawyA==
+    size: 49168173
+path: CTS-setup.exe
+sha512: H0DruNcFdyQcSRQfaOT8JHDVCINyhkGOoIHNE8EDG+rDEl9pe7D4nVDcIScL8cIMtFO87sSa/ZcTg+dZZRawyA==
+releaseDate: '2018-09-24T20:21:46.846Z'
