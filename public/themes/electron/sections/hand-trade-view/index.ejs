@@ -1,0 +1,25 @@
+<%
+let area = 'hand-trade-view';
+let title = "Trade View";
+let thumbnail = "Hand Trade View / index";
+
+let selling = 0;
+let buy_again = 0;
+%>
+<template class="task-template">
+    <section id="hand-trade-view-index-section" class="section js-section u-category-hand-trade-view">
+        <div class="bg-white p-l-25">
+            <%- include('./../partial/header', {title: title, thumbnail: thumbnail}) %>
+        </div>
+        <div class="section-wrapper">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <%- include('table', {area: area}); %>
+                </div>
+            </div>
+        </div>
+        <script>var area = "<%-area%>"; var type = "index"; var area_action = `${area}-${type}`;</script>
+        <script type="text/javascript" src='./renderer-process/hand-trade-view/javascript.js'>
+        </script>
+    </section>
+</template>

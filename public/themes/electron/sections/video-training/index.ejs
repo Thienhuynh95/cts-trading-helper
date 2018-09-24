@@ -1,0 +1,21 @@
+<%
+
+let area = 'video-training';
+let title = "Video Training";
+let thumbnail = "History Hand Trade / index";
+%>
+
+<template class="task-template">
+    <section id="<%- area;%>-index-section" class="section js-section u-category-<%- area;%>">
+        <div class="bg-white p-l-25">
+            <%- include('./../partial/header', {title: title, thumbnail: thumbnail}) %>
+        </div>
+        <div class="section-wrapper">
+            <div class="ibox">
+                <div class="ibox-content text-center">
+                    <iframe src="https://www.youtube.com/embed/FjWbUK2HdCo" width="700" height="400"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>

@@ -1,0 +1,12 @@
+
+<div class="form-group">
+    <label class="col-lg-2 col-md-1 control-label"><%- title %></label>
+    <div class="col-lg-8 col-md-8">
+        <%- include('./htmlObj/textbox.ejs', {content: content}); %>
+    </div>
+    <div class="col-lg-2 col-md-2">
+        <button type="button" class="btn btn-danger <%- btn['title'].toLowerCase().replace(' ', '-')%>"><%- btn['title'] %></button>
+    </div>
+</div>
+
+

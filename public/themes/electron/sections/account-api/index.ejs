@@ -1,0 +1,25 @@
+<%
+let area = 'account-api';
+let title = "Account Api";
+let thumbnail = "Account Api / index";
+let selling = 0;
+let buy_again = 0;
+%>
+<template class="task-template">
+    <section id="<%- area %>-index-section" class="section js-section u-category-<%- area %>-index">
+        <div class="bg-white p-l-25">
+            <%- include('./../partial/header', {title: title, thumbnail: thumbnail}) %>
+        </div>
+        <div class="section-wrapper">
+            <form role="form" class="form-inline zt-form" id="zt-form" action="" method="post">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <%- include('table', {area: area}); %>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <script type="text/javascript">var area = "<%-area;%>"; var type = "index"; var area_action = `${area}-${type}`;</script>
+        <script type="text/javascript" src='./renderer-process/<%- area %>/js-index.js'></script>
+    </section>
+</template>

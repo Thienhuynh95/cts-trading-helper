@@ -1,0 +1,26 @@
+<div class="form-group">
+    <label class="col-lg-2 control-label"><?php echo zcms_translate('Picture'); ?></label>
+
+    <div class="col-lg-8">
+        <?php 
+              if (isset($content['img']) && !empty($content['img'])){
+                  $path = STATIC_IMAGE."/public/upload/".$content['area']."/" . $content['img'];
+                  echo sprintf('<img class="m-b preview" src="%s">',$path);
+              }
+          ?>
+        <div class="fileinput fileinput-new input-group" data-provides="fileinput"
+             data-file-ext="gif,png,jpg,jpeg,txt">
+            <div class="form-control" data-trigger="fileinput">
+                <i class="fa fa-file-image-o fileinput-exists"></i>
+                <span class="fileinput-filename"><?php echo $content['img']; ?></span>
+            </div>
+            <span class="input-group-addon btn btn-default btn-file">
+                    <span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span>
+                    <input type="file" name="picture">
+                </span>
+            <a href="#" class="input-group-addon btn btn-default fileinput-exists"
+               data-dismiss="fileinput">Remove</a>
+        </div>
+        <input type="hidden" name="current-picture" value="<?php echo $content['img']; ?>">
+    </div>
+</div>

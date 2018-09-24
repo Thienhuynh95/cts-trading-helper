@@ -1,0 +1,17 @@
+<% 
+    let js_arr = ejse.data('resource')['js'][position];
+    let arr_tmp = [];
+    Object.keys(js_arr).map((e, i)=>{ 
+        let item = js_arr[e];
+        if (e == 'jquery'){
+            %>
+            <script>window.$ = window.jQuery = require("<%=item%>");</script>
+            <%
+        }
+        else{
+            %>
+            <script cms_name="<%=e%>" src="<%=item %>" type="text/javascript"></script>
+            <%
+        }
+    });
+%>

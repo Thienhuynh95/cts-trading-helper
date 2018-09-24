@@ -1,0 +1,11 @@
+<%
+let attr = content['attr'];
+let value = content['value'];
+let name = content['name'];
+let html_attr = "";
+Object.keys(attr).some((k)=>{
+    html_attr += `${k}="${attr[k]}" `;
+})
+%>
+
+<input type="text" name="<%- name %>" <%- html_attr %> value="<%- value ? value : '' %>">

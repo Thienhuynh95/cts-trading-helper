@@ -1,0 +1,31 @@
+<%
+let area = 'account-api';
+let title = "Account Api";
+let thumbnail = "Account Api / edit";
+let action = 'edit';
+let data = {};
+
+data = {
+    '_id' : '',
+    'acc_name' : '',
+    'key' : '',
+    'secret' : '',
+    'exchange' : '',
+    'btc_budget' : '',
+    'btc_buy' : '',
+    'btc_using' : '',
+    'eth_budget' : '',
+    'eth_buy' : '',
+    'eth_using' : '',
+    'bnb_budget' : '',
+    'bnb_buy' : '',
+    'bnb_using' : '',
+    'usdt_budget' : '',
+    'usdt_buy' : '',
+    'usdt_using' : '',
+    'status' : '',
+};
+%>
+
+
+<%- include('./form', {data: data, title: title, thumbnail: thumbnail, action : action, area : area}); %>

@@ -1,0 +1,12 @@
+<% 
+    let js_arr = ejse.data('resource')['css'];
+    let arr_tmp = [];
+    Object.keys(js_arr).map((e, i)=>{
+        let item = js_arr[e];
+%>
+<link rel="stylesheet" href="<%=item %>">
+<%
+    });
+    
+    // let path = __dirname, 'assets/js/*.js';
+%>

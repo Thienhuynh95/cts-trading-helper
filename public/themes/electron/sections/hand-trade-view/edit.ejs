@@ -1,0 +1,29 @@
+<% 
+let area = 'hand-trade-view';
+let title = "Trade View";
+let thumbnail = "Hand Trade View / edit";
+action = 'edit';
+
+let order = {};
+
+data = [];
+data['buy_active'] = true;
+data['sell_active'] = true;
+data['stoploss_active'] = true;
+data['buy_again_active'] = true;
+data['trade_test'] = 'active';
+data['user_key_id'] = '';
+
+let actArr = ['buy', 'sell', 'stoploss', 'buy-again'];
+let attrArr = ['price', 'percent', 'amount', 'total'];
+for(var i = 0; i < actArr.length; i++){
+    let v = actArr[i];
+    data[v+'-price'] = 0;
+    data[v+'-percent'] = 0;
+    data[v+'-down'] = 0;
+    data[v+'-amount'] = 0;
+    data[v+'-total'] = 0;
+}
+%>
+
+<%- include('./form', {data: data, title: title, thumbnail: thumbnail, area: area, action : action}); %>

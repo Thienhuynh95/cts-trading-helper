@@ -1,0 +1,56 @@
+
+<div class="form-group">
+    <%
+        let first = true;
+        Object.keys(column).map((k)=>{
+            let v = column[k];
+    %>
+    <label class="col-lg-1 col-table-tab m-btm-0 <%- (first ? 'col-lg-offset-1 col-md-offset-1' : '') %> text-left">
+        <%- v['title'] %>
+    </label>
+    <%
+        first = false;
+        });
+    %>
+</div>
+<%
+    let first_col = true;
+    Object.keys(row).map((key)=>{
+        let value = row[key];
+        if (!value['hide']){
+%>
+<div class="form-group">
+    <label class="col-lg-1 col-md-1 control-label p-t-9 <%- value['class']%>"><%- value['text'] %></label>
+    <%
+        let text = value['text'].replace(' ', '-');
+        Object.keys(column).map((k)=>{
+            let v = column[k];
+            // column (price, percent, ...)
+            let title = v['title'].split(':')[0];
+            // row (buy, sell, ...)
+    %>
+        <div class="col-lg-2 col-table-tab p-r-0 input-label">
+            <input type="number" name="<%- (text+'-'+title).toLowerCase() %>" class="form-control input-<%- title.toLowerCase() %>
+                <%- (text+'-'+title).toLowerCase() %> text-right p-r-0 <%- (v['class'] ? v['class'][key] : '') %>"
+                value="<%- v['input'][key] %>">
+            <span><%- v['subtitle'] %></span>
+            <% if (v['helper']) { %>
+            <span class="<%- text.toLowerCase() %>-help help-block m-b-none desc-title text-right text-13"><%- v['helper'][key] %> BTC</span>
+            <% }%>
+        </div>
+    <%  });%>
+    <% if (value['cb']){%>
+    <div class="active active-<%- text.toLowerCase();%> i-checks p-t-7">
+        <label class="text-w500">
+            <input type="checkbox" name="active-<%- text.toLowerCase()%>" <%- (value['cb'] ? 'checked': '') %> >
+            Active
+        </label>
+    </div>
+    <% } %>
+</div>
+<%
+        }
+    });
+%>
+
+

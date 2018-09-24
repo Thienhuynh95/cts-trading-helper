@@ -1,0 +1,24 @@
+<?php
+$siteConfigs = $this->getDI()->get("siteConfigs");
+$siteConfigsLongDate = $siteConfigs["longdate"];
+?>
+
+<?php include 'table.phtml';?>
+
+<script type="text/javascript">
+dataTable();
+
+function dataTable() {
+    $('.dataTables-example').DataTable({
+        dom: '<"html5buttons"B>lTfgitp',
+        buttons: [],
+        "iDisplayLength": -1,
+        "order": [[8, "desc"]],
+        lengthMenu: [[-1,15,30,50], ["All","15","30","50"]],
+        "columnDefs": [ {
+            "targets": 0,
+            "orderable": false
+        } ]
+    });
+}
+</script>

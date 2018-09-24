@@ -1,0 +1,32 @@
+<%
+let area = 'about'; 
+%>
+
+<template class="task-template">
+    <div id="about-modal" class="about modal">
+        <div class="about-wrapper">
+            <header class="about-header text-w800 color-white p-r-0">
+                <h1 class="about-title dis-inblock m-r-7">CTS</h1><span class="about-version text-36 text-w700">v1.0.1</span>
+                <div class="hr-line m-btm-15 b-1 m-l-5"></div>
+                <div class="information-area text-w500">
+                    <table class="table no-border b-0">
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <div class="button-group">
+                        <button id="get-started" class="about-button modal-hide full-width text-14 bg m-btm-20 hidden">GO DASHBOARD</button>
+                        <button id="update" class="about-button modal-hide full-width text-14 bg">UPDATE v1.0.2</button>
+                    </div>
+                </div>
+            </header>
+            <main class="about-sections">
+                <section class="about-section text-right">
+                    <div class="notification dis-inblock color-white p-tb-45 p-lr-15 text-left">
+                        
+                    </div>
+                </section>
+            </main>
+        </div>
+        <script type="text/javascript" src='./renderer-process/<%- area %>/javascript.js'></script>
+    </div>
+</template>

@@ -1,0 +1,22 @@
+
+<div class="form-group">
+    <label class="<%- content['div'] ? `${Object.keys(content['div']).map((k)=>{return `col-${k}-${content['div'][k][0]}`}).join(' ')}` : 'col-lg-2 col-md-1'%> control-label"><%- title; %></label>
+    <div class="<%- content['div'] ? `${Object.keys(content['div']).map((k)=>{return `col-${k}-${content['div'][k][1]}`}).join(' ')}` : 'col-lg-8 col-md-8'%>">
+        <% if (content['type'] == 'textbox') {%>
+            <%- include('./htmlObj/textbox.ejs', {content: content}); %>
+        <% } else if (content['type'] == 'selectbox'){%>
+            <%- include('./htmlObj/selectbox.ejs', {content: content}); %>
+        <% } else if (content['type'] == 'checkbox'){%>
+            <%- include('./htmlObj/checkbox.ejs', {content: content}); %>
+        <% } else if (content['type'] == 'number'){%>
+            <%- include('./htmlObj/numberbox.ejs', {content: content}); %>
+        <% } else if (content['type'] == 'radio'){%>
+            <%- include('./htmlObj/radio.ejs', {content: content}); %>
+        <% } %>
+    </div>
+    <div class="<%- content['div'] ? `${Object.keys(content['div']).map((k)=>{return `col-${k}-${content['div'][k][1]} col-${k}-offset-${content['div'][k][0]}`}).join(' ')}` : 'col-lg-8 col-md-8 col-lg-offset-2 col-md-offset-1'%>">
+        <p class="<%- content['name'];%>-error error m-btm-0"></p>
+    </div>
+</div>
+
+

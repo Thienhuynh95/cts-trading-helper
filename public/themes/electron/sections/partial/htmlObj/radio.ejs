@@ -1,0 +1,24 @@
+
+<%
+/*
+let typeDelete = {type: "radio",name: 'typeDelete', value: 'multi', data: {
+    'data' : {
+        'all' : 'All (Del All History)',
+        'multi' : 'Multi'
+    },
+    'separator' : '<span class="m-r-7 dis-inblock">&nbsp;</span>'
+}};
+*/
+let value = content['value'];
+let name = content['name'];
+let data = content['data'];
+Object.keys(data['data']).map((k, i)=>{
+%>
+    <input type="radio" name="<%-name;%>" value="<%- k;%>" <%- (value == k) ? 'checked' : ''%> class="ver-middle"> 
+    <span class="dis-inblock"><%- data['data'][k];%></span>
+    <% if (i < Object.keys(data['data']).length - 1) {%>
+    <%- data['separator'];%>
+    <% } %>
+<%
+});
+%>

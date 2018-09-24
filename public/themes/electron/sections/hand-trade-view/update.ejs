@@ -1,0 +1,133 @@
+<?php
+
+use Zcms\Core\Html;
+use Zcms\Core\AdminUrl;
+use Zcms\Backend\Models\CoinCashFlow3M;
+use Zcms\Backend\Models\CoinsList;
+use Zcms\Backend\Helpers\HelperGeneral;
+use Zcms\Backend\Helpers\TradeViewHelper;
+use Zcms\Backend\Models\BinanceSymbol;
+
+$siteConfigs = $this->getDI()->get("siteConfigs");
+$siteConfigsLongDate = $siteConfigs["longdate"];
+
+$htmlObj = new Html();
+$itemObj = new BinanceSymbol();
+$itemResult = $itemObj->getAll($params)->toArray();
+
+$area = "hand-trade";
+$baseUri = $zUrl->getBaseUri();
+$lnkAdd = AdminUrl::add($baseUri, $area);
+$lnkStatus = AdminUrl::index($baseUri, $area);
+$actionUrl = AdminUrl::process($baseUri, $area) . '?act=';
+$option = [];
+$option['action'] = 'index';
+$uri = $_SERVER['REQUEST_URI'];
+$redirect = 'redirect=' . $zUrl->getCurrentUrl(true);
+
+$countAll = $countStatus['all'];
+$countETH = $countStatus['eth'];
+$countBTC = $countStatus['btc'];
+$countBNB = $countStatus['bnb'];
+$countUSDT = $countStatus['usdt'];
+
+$type_coin = isset($params['status']) ? $params['status'] : 'BTC';
+
+$clearAll = $lnkStatus . $zUrl->makeRequestUriSearch($uri, 'search_str', '', true);
+$clearSearch = (!strpos($clearAll, "?")) ? "$clearAll?" : "$clearAll&";
+$siteConfigs = $this->getDI()->get("siteConfigs");
+$siteConfigsLongDate = $siteConfigs["longdate_admin"];
+$base_url = $_SERVER['HTTP_HOST'];
+$urlCurrent = $base_url . $_SERVER["REQUEST_URI"];
+$urlCurrent = substr($urlCurrent, stripos($urlCurrent, '/'));
+$siteConfigs = $this->getDI()->get("siteConfigs");
+$siteConfigsLongDate = $siteConfigs["longdate"];
+$selling = 0;
+$buy_again = 0;
+
+?>
+<?php
+$clearAll = $lnkStatus . $zUrl->makeRequestUriSearch($uri, 'search_str', '', true);
+$clearSearch = (!strpos($clearAll, "?")) ? "$clearAll?" : "$clearAll&";
+?>
+<?php
+
+//?>
+
+<?php $messageNotify = $this->flashSession->getMessages();
+$notifyScript = '';
+if (!empty($messageNotify)) {
+    foreach ($messageNotify as $status => $message) {
+        $sts = ($status == 'success') ? 1 : 0;
+        $notifyScript = "$(document).ready(function(){loadToastr($sts, '$message[0]');});";
+    }
+}
+?>
+<?php
+$this->partial("partial/box-search-filter", [
+    'buttonFilter' => TradeViewHelper::showButtonFilter($baseUri, $type_coin, ["all" => $countAll, "ETH" => $countETH, "BTC" => $countBTC, "BNB" => $countBNB, "USDT" => $countUSDT], 'candle-pump'),
+//    'inputSearch' => BinanceAPIHelper::showInputSearch($data['search_str'], $clearAll)
+    'inputSearch' => ''
+]);
+?>
+<script src="<?php echo LINK_ROBO;?>/socket.io/socket.io.js" type="text/javascript"></script>
+<div class="ibox">
+    <div class="ibox-content">
+        <?php include 'table.phtml';
+        ?>
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	dataTable();
+	soundConfigUpdate();
+	let last_selling = <?php echo $last_selling;?>;
+	let selling = <?php echo isset($selling) ? $selling : 0;?>;
+	let last_buy_again = <?php echo $last_buy_again;?>;
+	let buy_again = <?php echo isset($buy_again) ? $buy_again : 0;?>;
+	if (last_selling != selling || last_buy_again != buy_again){
+		console.log(last_selling, selling);
+		ion.sound.play("Short-ascending-bell-gliss");
+	}
+
+	function soundConfigUpdate(){
+        ion.sound({
+            sounds: [
+                {
+                    name: "Short-ascending-bell-gliss"
+                }
+            ],
+            volume: 1,
+            path: "/public/themes/sbackend/js/ion.sound/",
+            preload: true
+        });
+        function updateDataUpdate(){
+            setTimeout(()=>{
+            	$.get("<?php echo AdminUrl::update($baseUri, $area) ?>", {"status":"<?php echo $main?>", "selling": selling, "buy-again": buy_again},function(data) {
+                	console.log('selling: ' + <?php echo $last_selling;?> + " " + <?php echo $selling;?>, 'buy-again: ' + <?php echo $last_buy_again;?> + " " + <?php echo $buy_again;?>);
+                    $('.wrapper.wrapper-content').html(data);
+                });
+            }, 120000);
+        }
+        updateDataUpdate();
+    }
+})
+</script>
+<?php
+// include_once 'javascript.php';
+
+// $zHtml->addMeta('no-cache', 'http-equiv', 'pragma', 'no-cache', 'first');
+
+// $option = [];
+// $option['url_save_click_btn'] = AdminUrl::save($baseUri, $area);
+// $option['status'] = $type_coin;
+// $option['user_id'] = $user_id;
+// $option['data'] = json_encode($data);
+// $option['noti'] = $noti;
+// $option['link_robo'] = LINK_ROBO;
+// $option['readFilePath'] = ZCMS_FILES_URL . '/data/price_list.txt';
+// $option['lnkIndex'] = AdminUrl::index($baseUri, $area);
+// $js = js_code($option);
+
+// $zHtml->addScript('js_trade_config_bb', $js . $notifyScript, null, ['in_pos' => 'footer']);
+?>

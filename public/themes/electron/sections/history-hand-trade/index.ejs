@@ -1,0 +1,105 @@
+<%
+
+let area = 'history-hand-trade';
+let title = "History Trade";
+let thumbnail = "History Hand Trade / index";
+
+
+let fromToDate = {type: "textbox", name: 'fromToDate', value: data['fromToDate'], attr: {'class' : 'form-control datepicker text-right'}};
+
+// delete button group
+let arrDelete = {
+    'all' : 'All (Del All History)',
+    'multi' : 'Multi'
+};
+let typeDelete = {type: "radio",name: 'typeDelete', value: 'multi', data: {
+    'data' : arrDelete,
+    'separator' : '<span class="m-r-7 dis-inblock">&nbsp;</span>'
+}};
+
+// filter button group
+let arrFilter = {
+    'all_time' : 'All',
+    'single_time' : 'Single'
+};
+let typeFilter = {type: "radio",name: 'typeFilter', value: 'single_time', data: {
+    'data' : arrFilter,
+    'separator' : '<span class="m-r-7 dis-inblock">&nbsp;</span>'
+}};
+
+// restore button
+let restoreFilter = {type: "radio",name: 'typeFilter', value: 'single_time', data: {
+    'data' : {'all' : 'All'},
+    'separator' : ''
+}};
+%>
+<template class="task-template">
+    <section id="history-hand-trade-index-section" class="section js-section u-category-history-hand-trade">
+        <div class="bg-white p-l-25">
+            <%- include('./../partial/header', {title: title, thumbnail: thumbnail}) %>
+        </div>
+        <div class="section-wrapper">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="summary clearfix">
+                        <div class="filter-summary clearfix">
+                            <div class="input-group col-12">
+                                <form id="filter-form" class="text-0">
+                                    <div class="form-group dis-inblock text-left text-14">
+                                        <div class="name dis-inblock ver-middle">Date:</div>
+                                        <div class="dis-inblock date-filter m-r-10 text-left ver-middle">
+                                            <%- include('./../partial/htmlObj/textbox.ejs', {content: fromToDate}); %>
+                                        </div>
+                                    </div>
+                                    <div class="form-group dis-inblock text-left text-14">
+                                        <div class="name dis-inblock ver-middle">Symbol:</div>
+                                        <div class="dis-inblock input-symbol ver-middle m-r-10">
+                                            <input type="text" data-provide="typeahead" placeholder="ADA/BTC"
+                                                name="symbol"
+                                                value=""
+                                                class="form-control symbol"/>
+                                        </div>
+                                    </div>
+                                    <div class="filter-option dis-inblock">
+                                        <div class="dis-inblock p-lr-5 p-tb-5 m-l-15 text-left text-14 time-filter" style="border: 2px solid darkgray !important;">
+                                            <div class="dis-inblock text-14">
+                                                <%- include('./../partial/htmlObj/radio.ejs', {content: typeFilter}); %>
+                                            </div>
+                                        </div>
+                                        <div class="dis-inblock m-t-15 m-lr-15 text-14">
+                                            <%- include('./../partial/htmlObj/radio.ejs', {content: restoreFilter}); %>
+                                        </div>
+                                    </div>
+                                    <div class="dis-inblock m-t-15 m-r-15 separate text-14">
+                                        <button type="button"
+                                                class="btn btn-primary p-lr-30 p-tb-6 filter-btn"
+                                                style="width: 100%">Filter
+                                        </button>
+                                    </div>
+                                    <div class="result dis-inblock"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hr-line m-btm-15"></div>
+            <div class="ibox">
+                <div class="ibox-content">
+                    <form id="table-form">
+                        <div class="btn-action-group m-btm-15">
+                            <button type="button" class="btn btn-primary p-lr-40 p-tb-5 delete m-r-15">Delete</button>
+                            <%- include('./../partial/htmlObj/radio.ejs', {content: typeDelete}); %>
+                        </div>
+                        <div class="table-block">
+                            <%- include('table.ejs');%>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script>var area = "<%-area%>"; var type = "index"; var area_action = `${area}-${type}`;</script>
+            <script type="text/javascript" src='./renderer-process/<%-area%>/javascript.js'>
+            </script>
+        </div>
+    </section>
+</template>

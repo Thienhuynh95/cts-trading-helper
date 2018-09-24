@@ -1,0 +1,49 @@
+<%
+let area = 'dashboard';
+let title = "Dashboard";
+let thumbnail = "Dashboard / index";
+
+%>
+<template class="task-template">
+    <section id="<%- area%>-index-section" class="section js-section u-category-<%- area;%>">
+        <div class="bg-white p-l-25">
+            <%- include('./../partial/header', {title: title, thumbnail: thumbnail}) %>
+        </div>
+        <div class="section-wrapper">
+            <div class="row">
+                <div class="col-dashboard-big">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Coin Tăng</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <%- include('./index/table.ejs', {table_name: 'table-up'})%>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-dashboard-big">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>Coin Giảm</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <%- include('./index/table.ejs', {table_name: 'table-down'})%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>var area = "<%-area%>"; var type = "index"; var area_action = `${area}-${type}`;</script>
+            <script type="text/javascript" src='./renderer-process/<%- area%>/javascript.js'></script>
+        </div>
+    </section>
+</templage>

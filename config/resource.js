@@ -1,0 +1,53 @@
+let resource = {
+    css: {
+        global: './assets/css/global.css',
+        section: './assets/css/section.css',
+        about: './assets/css/about.css',
+        variable: './assets/css/variables.css',
+        nav: './assets/css/nav.css',
+        bootstrap : './assets/css/bootstrap.min.css',
+        font_awesome : './assets/css/font-awesome/css/font-awesome.css',
+        // bootstrap_chosen : './assets/css/plugins/chosen/bootstrap-chosen.css',
+        app : './assets/css/app.css',
+        toastr : './assets/css/toastr.min.css',
+        animate : './assets/css/animate.css',
+        daterangepicker : './assets/css/plugins/daterangepicker/daterangepicker.css',
+        switchery : './assets/css/plugins/switchery/switchery.css',
+        tooltipster : './assets/css/tooltipster.bundle.min.css',
+        iCheck : './assets/css/plugins/iCheck/custom.css',
+        datatable : './assets/css/plugins/datatables/media/css/dataTables.bootstrap.css',
+        datatable_colVis : './assets/css/plugins/datatables-colvis/css/dataTables.colVis.css',
+        datatable_index : './assets/css/plugins/dataTable/index.css',
+        custom : './assets/css/custom.css',
+        style : './assets/css/style.css',
+        style_new : './assets/css/style-new.css',
+    },
+    js: {
+        top : {
+            jquery : './assets/js/jquery-2.1.1.js',
+            moment : './assets/js/plugins/moment/moment.js',
+            moment_locales : './assets/js/plugins/moment/moment-with-locales.js',
+            typeahead : './assets/js/plugins/typehead/bootstrap3-typeahead.min.js',
+            daterangepicker : './assets/js/plugins/daterangepicker/daterangepicker.js',
+        },
+        bottom: {
+            // bootstrap : './assets/js/bootstrap.min.js',
+            metisMenu : './assets/js/plugins/metisMenu/jquery.metisMenu.js',
+            slimscroll : './assets/js/plugins/slimscroll/jquery.slimscroll.min.js',
+            inspinia : './assets/js/inspinia.js',
+            tooltipster : './assets/js/tooltipster.bundle.min.js',
+            pace : './assets/js/plugins/pace/pace.min.js',
+            toastr : './assets/js/toastr.js',
+            jquery_ui : './assets/js/plugins/jquery-ui/jquery-ui.min.js',
+            icheck : './assets/js/plugins/iCheck/icheck.min.js',
+            // menu : './assets/js/menu.js',
+            // clipboard : './assets/js/plugins/clipboard/clipboard.min.js',
+            // zcms_func : './assets/js/zcms-func.js',
+            ion_sound  : './assets/js/ion.sound.min.js',
+            datatable : './assets/js/plugins/datatables/media/js/jquery.dataTables.min.js',
+            datatable_bootstrap : './assets/js/plugins/datatables/media/js/dataTables.bootstrap.js',
+            rowGroup   : './assets/js/dataTables.rowGroup.min.js',
+        }
+    }
+}
+module.exports = resource;

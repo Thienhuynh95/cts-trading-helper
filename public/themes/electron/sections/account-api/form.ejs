@@ -1,0 +1,95 @@
+<%
+let section_id = [area, 'index'].join('-');
+
+attr = {class : 'form-control'};
+
+acc_name = {type: "textbox", name: 'acc_name', value: data['acc_name'], attr: attr};
+
+statusData = {active : 'Active', inactive : 'Inactive'};
+status = {type: "selectbox", name: 'status', value: data['status'], attr: attr, data: statusData};
+
+exchangeData = {'binance' : 'Binance'};
+exchange = {type: "selectbox", name: 'exchange', value: data['exchange'], attr: attr, data: exchangeData};
+
+key = {type: "textbox", name: 'key', value: data['key'], attr: attr};
+
+secret = {type: "textbox", name: 'secret', value: data['secret'], attr: attr};
+
+btc_budget = {type: "number", name: 'btc_budget', value: data['btc_budget'], attr: attr};
+
+btc_buy = {type: "number", name: 'btc_buy', value: data['btc_buy'], attr: attr};
+
+eth_budget = {type: "number", name: 'eth_budget', value: data['eth_budget'], attr: attr};
+
+eth_buy = {type: "number", name: 'eth_buy', value: data['eth_buy'], attr: attr};
+
+bnb_budget = {type: "number", name: 'bnb_budget', value: data['bnb_budget'], attr: attr};
+
+bnb_buy = {type: "number", name: 'bnb_buy', value: data['bnb_buy'], attr: attr};
+
+usdt_budget = {type: "number", name: 'usdt_budget', value: data['usdt_budget'], attr: attr};
+
+usdt_buy = {type: "number", name: 'usdt_buy', value: data['usdt_buy'], attr: attr};
+
+keyBlock = action == 'add' ? ['Key', key] : ['Key', key, {btn : {title:'Check API'}}];
+
+btnBack = `<button type="button" id="button-${section_id}" data-section="${section_id}" class="nav-button auto-width btn btn-default">Back</button>`;
+btnSaveChange = '<button class="btn btn-primary save-change" type="button">Save changes</button>';
+
+arrElements = {
+    'acc_name' : ['Account', acc_name],
+    'key' : keyBlock,
+    'secret' : ['Secret', secret],
+    'exchange' : ['Exchange', exchange],
+    // 'btc_budget' : ['BTC Budget', btc_budget],
+    // 'btc_buy' : ['BTC Buy', btc_buy],
+    // 'eth_budget' : ['ETH budget', eth_budget],
+    // 'eth_buy' : ['ETH Buy', eth_buy],
+    // 'bnb_budget' : ['BNB Budget', bnb_budget],
+    // 'bnb_buy' : ['BNB Buy', bnb_buy],
+    // 'usdt_budget' : ['USDT Budget', usdt_budget],
+    // 'usdt_buy' : ['USDT Buy', usdt_buy],
+    'status' : ['Status', status],
+    'btn-back' : [btnBack + ' ' + btnSaveChange, {type : 'button'}]
+};
+%>
+
+<template class="task-template">
+    <section id="<%- section_id %>-section`" class="section js-section u-category-<%- section_id %> fadeInLeft">
+        <div class="bg-white p-l-25">
+            <%- include('./../partial/header', {title: title, thumbnail: thumbnail}) %>
+        </div>
+        <div class="section-wrapper">
+            <form role="form" class="form-horizontal z-form-input" method="post" enctype="multipart/form-data" action="">
+                <div class="row" id="sortable1">
+                    <div class="col-lg-12 ui-sortable connectedSortable">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content">
+                                <%-
+                                    Object.keys(arrElements).map((k)=>{
+                                        let element = arrElements[k];
+                                        if (element[1]['type'] == "button") {
+                                            return include("./../partial/row-info-button", {content :  element[0]});
+                                        } else if (element[2] && element[2]['btn']) {
+                                            return include("./../partial/row-info-with-button-beside", {title :  element[0], content : element[1], btn : {title : element[2]['btn']['title']}});
+                                        } else if (element[0] == 'Picture' && element[1] && element[1]['type'] == "picture") {
+                                            return include("./../partial/row-picture", {content : element[1]});
+                                        } else {
+                                            return include("./../partial/row-info", {title :  element[0], content : element[1]});
+                                        }
+                                    }).join('');
+                                %>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <script type="text/javascript">
+            var action = "<%- action %>";
+            var area_action = "<%- area; %>-<%- action%>";
+        </script>
+        <script type="text/javascript" src='./renderer-process/<%- area %>/javascript.js'></script>
+    </section>
+</template>

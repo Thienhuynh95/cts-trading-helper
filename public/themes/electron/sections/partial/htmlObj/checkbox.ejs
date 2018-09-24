@@ -1,0 +1,16 @@
+<%
+let attr = content['attr'];
+let value = content['value'];
+let name = content['name'];
+let text = content['text'];
+let html_attr = "";
+Object.keys(attr).some((k)=>{
+    html_attr += `${k}="${attr[k]}" `;
+})
+if (value == 'active'){
+    html_attr += 'checked';
+}
+%>
+<label style="margin-top:7px">
+<input type="checkbox" name="<%- name; %>" <%- html_attr %> value="<% value; %>"> <span class="text-w500 m-l-4"><%- text; %></span>
+</label>

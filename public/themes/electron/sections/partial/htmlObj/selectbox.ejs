@@ -1,0 +1,21 @@
+<%
+let attr = content['attr'];
+let value = content['value'];
+let name = content['name'];
+let data = content['data'];
+let html_attr = "";
+let option_html = "";
+Object.keys(attr).some((k)=>{
+    html_attr += `${k}="${attr[k]}" `;
+})
+Object.keys(data).some((k)=>{
+    let selected = '';
+    if (k == value){
+        selected = 'selected';
+    }
+    option_html += `<option ${selected} value="${k}">${data[k]}</option>`;
+})
+%>
+<select name="<%- name %>" <%- html_attr %>>
+    <%- option_html %>
+</select>

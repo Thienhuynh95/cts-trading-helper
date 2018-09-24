@@ -1,0 +1,106 @@
+{
+  "name": "cts-trading-helper",
+  "productName": "CTS",
+  "version": "1.0.0",
+  "description": "CTS Trading Helper",
+  "main": "main.js",
+  "bin": "cli.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --debug",
+    "test": "mocha && standard",
+    "package": "npm-run-all package:*",
+    "package:mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --out=out",
+    "package:win": "electron-packager . --overwrite --platform=win32 --out=out",
+    "package:linux": "electron-packager . --overwrite --platform=linux --arch=x64 --out=out",
+    "package:sign-exe": "signcode './out/Electron API Demos-win32-ia32/Electron API Demos.exe' --cert ~/cts-trading-helper.p12 --name 'CTS' --url 'https://gitlab.laptrinhaz.net/team-dev/electron.git'",
+    "package:installer": "node ./script/installer.js",
+    "package:sign-installer": "signcode './out/windows-installer/ElectronAPIDemosSetup.exe' --cert ~/electron-api-demos.p12 --name 'Electron API Demos' --url 'http://electron.atom.io'",
+    "package:mas": "./script/mas.sh",
+    "windows-store": "node ./script/windows-store.js",
+    "release": "node ./script/release.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "publish": "build --mac --win -p always"
+  },
+  "repository": "https://github.com/Thienhuynh95/cts-trading-helper.git",
+  "build": {
+    "appId": "zendvn.cts-trading-helper",
+    "asar": false,
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://github.com/Thienhuynh95/cts-trading-helper.git"
+      }
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "CTS-setup.${ext}",
+      "icon": "public/themes/electron/assets/app-icon/win/app.ico",
+      "verifyUpdateCodeSignature": false
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "public/themes/electron/assets/app-icon/mac/mac.icns"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ]
+    }
+  },
+  "keywords": [
+    "CTS",
+    "Trading",
+    "Helper"
+  ],
+  "author": "ZendVN",
+  "license": "MIT",
+  "devDependencies": {
+    "devtron": "^1.3.0",
+    "electron": "^2.0.4",
+    "electron-builder": "^20.28.4",
+    "electron-packager": "^12.1.1",
+    "electron-winstaller": "^2.2.0",
+    "grunt": "^1.0.1",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-cssmin": "^2.2.0",
+    "grunt-contrib-uglify": "^3.0.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-includes": "^1.0.0",
+    "grunt-sass": "^2.0.0",
+    "husky": "^0.14.3",
+    "mocha": "^5.2.0",
+    "npm-run-all": "^4.0.2",
+    "rimraf": "^2.5.2",
+    "signcode": "^0.5.0",
+    "spectron": "^3.8.0",
+    "standard": "^8.2.0"
+  },
+  "dependencies": {
+    "chokidar": "^2.0.4",
+    "electron-updater": "^3.1.2",
+    "date-and-time": "^0.6.2",
+    "ejs-electron": "^2.0.3",
+    "electron-settings": "^3.2.0",
+    "glob": "^7.1.0",
+    "highlight.js": "^9.3.0",
+    "jquery": "^3.3.1",
+    "leveldown": "^4.0.1",
+    "node-binance-api": "^0.4.29",
+    "node-emoji": "^1.8.1",
+    "pouchdb": "^7.0.0",
+    "pouchdb-find": "^7.0.0",
+    "socket.io-client": "^2.1.1",
+    "update-electron-app": "^1.1.1"
+  },
+  "standard": {
+    "env": {
+      "mocha": true
+    }
+  }
+}
