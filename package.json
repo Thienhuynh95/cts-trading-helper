@@ -1,7 +1,7 @@
 {
   "name": "cts-trading-helper",
   "productName": "CTS",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CTS Trading Helper",
   "main": "main.js",
   "bin": "cli.js",

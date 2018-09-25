@@ -99,7 +99,7 @@ function createRelease (assets) {
       tag_name: `v${version}`,
       target_commitish: 'master',
       name: version,
-      body: `autoupdate builds for win *v1.0.0*`,
+      body: `autoupdate builds for win *v${version}*`,
       draft: true,
       prerelease: false
     }
