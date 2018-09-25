@@ -2,3 +2,5 @@ node_modules
 out
 npm-debug.log
 public/themes/electron/assets/data/*
+dist
+script

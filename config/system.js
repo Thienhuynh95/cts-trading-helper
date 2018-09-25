@@ -3,7 +3,7 @@ let params = {
     define : {
         root_path: '',
         electron_theme: '/public/themes/electron/',
-        release: false
+        release: true
     }
 }
 params['define']['root_path'] = 

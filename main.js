@@ -13,22 +13,16 @@ const resource = require('./config/resource')
 const menu = require('./config/menu')
 const views = require('./config/views')
 const system = require('./config/system')
-const {app, BrowserWindow, dialog} = require('electron')
+const {app, BrowserWindow, dialog, Notification} = require('electron')
 const updater = require("electron-updater");
 const autoUpdater = updater.autoUpdater;
 
 const debug = /--debug/.test(process.argv[2])
 
 let mainWindow = null
-// update();
+update();
 function update(){
-    autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "PAp-CkbqtNfUpABXYyMR" };
-    autoUpdater.autoDownload = true;
-
-    autoUpdater.setFeedURL({
-        provider: "generic",
-        url: "https://gitlab.laptrinhaz.net/thien-quyen-nang/app_update/tree/master"
-    });
+    
 
     autoUpdater.on('checking-for-update', function () {
         sendStatusToWindow('Checking for update...');
@@ -66,7 +60,10 @@ function update(){
     autoUpdater.checkForUpdates();
 
     function sendStatusToWindow(message) {
-        console.log(message);
+        let myNotification = new Notification('Title', {
+            body: message
+        })
+        myNotification.show();
     }
 }
 
@@ -144,6 +141,7 @@ function initialize () {
 
   app.on('ready', () => {
     createWindow()
+    autoUpdater.checkForUpdates();
   })
 
   app.on('window-all-closed', () => {

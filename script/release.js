@@ -5,9 +5,13 @@ const fs = require('fs')
 const path = require('path')
 const request = require('request')
 const util = require('util')
+const {app} = require('electron')
 
-const token = process.env.ELECTRON_API_DEMO_GITHUB_TOKEN
+process.env.GH_TOKEN = '9d10732d6eb99a4b3428ca0f31d270c6c07fccb4'
+const token = process.env.GH_TOKEN
 const version = require('../package').version
+const name = require('../package').name
+const productName = require('../package').productName
 
 checkToken()
   .then(zipAssets)
@@ -21,7 +25,7 @@ checkToken()
 
 function checkToken () {
   if (!token) {
-    return Promise.reject('ELECTRON_API_DEMO_GITHUB_TOKEN environment variable not set\nSet it to a token with repo scope created from https://github.com/settings/tokens/new')
+    return Promise.reject('TOKEN environment variable not set\nSet it to a token with repo scope created from https://github.com/settings/tokens/new')
   } else {
     return Promise.resolve(token)
   }
@@ -51,36 +55,42 @@ function zipAsset (asset) {
 }
 
 function zipAssets () {
-  const outPath = path.join(__dirname, '..', 'out')
+  const outPath = path.join(__dirname, '..', 'dist')
 
-  const zipAssets = [{
-    name: 'electron-api-demos-mac.zip',
-    path: path.join(outPath, 'Electron API Demos-darwin-x64', 'Electron API Demos.app')
-  }, {
-    name: 'electron-api-demos-windows.zip',
-    path: path.join(outPath, 'Electron API Demos-win32-ia32')
-  }, {
-    name: 'electron-api-demos-linux.zip',
-    path: path.join(outPath, 'Electron API Demos-linux-x64')
-  }]
+  const zipAssets = [
+        // {
+        //     name: `${name}-mac.zip`,
+        //     path: path.join(outPath, `${name}-setup`, `${name}.app`)
+        // }, 
+        {
+            name: `${productName}-win32-ia32.zip`,
+            path: path.join(outPath, `${productName}-win32-ia32.zip`)
+        }, 
+        // {
+        //     name: `${name}-linux.zip`,
+        //     path: path.join(outPath, `${name}-linux-x64`)
+        // }
+    ]
 
-  return Promise.all(zipAssets.map(zipAsset)).then((zipAssets) => {
-    return zipAssets.concat([{
-      name: 'RELEASES',
-      path: path.join(outPath, 'windows-installer', 'RELEASES')
-    }, {
-      name: 'ElectronAPIDemosSetup.exe',
-      path: path.join(outPath, 'windows-installer', 'ElectronAPIDemosSetup.exe')
-    }, {
-      name: `electron-api-demos-${version}-full.nupkg`,
-      path: path.join(outPath, 'windows-installer', `electron-api-demos-${version}-full.nupkg`)
-    }])
-  })
+    return zipAssets.concat([
+        // {
+        //     name: 'RELEASES',
+        //     path: path.join(outPath, 'windows-installer', 'RELEASES')
+        // }, 
+        {
+            name: `${productName}-setup.exe`,
+            path: path.join(outPath, `${productName}-setup.exe`) 
+        }, 
+        // {
+        //     name: `${(name).toLowerCase()}-${version}-full.nupkg`,
+        //     path: path.join(outPath, 'windows-installer', `${(name).toLowerCase()}-${version}-full.nupkg`)
+        // }
+    ])
 }
 
 function createRelease (assets) {
   const options = {
-    uri: 'https://api.github.com/repos/electron/electron-api-demos/releases',
+    uri: 'https://api.github.com/repos/Thienhuynh95/cts-trading-helper/releases',
     headers: {
       Authorization: `token ${token}`,
       'User-Agent': `node/${process.versions.node}`
@@ -89,7 +99,7 @@ function createRelease (assets) {
       tag_name: `v${version}`,
       target_commitish: 'master',
       name: version,
-      body: 'An awesome new release :tada:',
+      body: `autoupdate builds for win *v1.0.0*`,
       draft: true,
       prerelease: false
     }
@@ -106,6 +116,7 @@ function createRelease (assets) {
         return reject(Error(`Non-201 response: ${response.statusCode}\n${util.inspect(body)}`))
       }
 
+      console.log(assets);
       resolve({assets: assets, draft: body})
     })
   })
