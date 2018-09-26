@@ -7,7 +7,7 @@ const request = require('request')
 const util = require('util')
 const {app} = require('electron')
 
-process.env.GH_TOKEN = '1848918f94bbadf134df435666f9ff27e283c140'
+process.env.GH_TOKEN = '4d57dfaa8a837a667f07b4d6ab200810ff070ccc'
 const token = process.env.GH_TOKEN
 const version = require('../package').version
 const name = require('../package').name
@@ -80,7 +80,7 @@ function zipAssets () {
         {
             name: `${productName}-setup.exe`,
             path: path.join(outPath, `${productName}-setup.exe`) 
-        }, 
+        }
         // {
         //     name: `${(name).toLowerCase()}-${version}-full.nupkg`,
         //     path: path.join(outPath, 'windows-installer', `${(name).toLowerCase()}-${version}-full.nupkg`)
