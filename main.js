@@ -24,47 +24,47 @@ update();
 function update(){
     
 
-    autoUpdater.on('checking-for-update', function () {
-        sendStatusToWindow('Checking for update...');
-    });
+    // autoUpdater.on('checking-for-update', function () {
+    //     sendStatusToWindow('Checking for update...');
+    // });
 
-    autoUpdater.on('update-available', function (info) {
-        sendStatusToWindow('Update available.');
-    });
+    // autoUpdater.on('update-available', function (info) {
+    //     sendStatusToWindow('Update available.');
+    // });
 
-    autoUpdater.on('update-not-available', function (info) {
-        sendStatusToWindow('Update not available.');
-    });
+    // autoUpdater.on('update-not-available', function (info) {
+    //     sendStatusToWindow('Update not available.');
+    // });
 
-    autoUpdater.on('error', function (err) {
-        sendStatusToWindow('Error in auto-updater.');
-    });
+    // autoUpdater.on('error', function (err) {
+    //     sendStatusToWindow('Error in auto-updater.');
+    // });
 
-    autoUpdater.on('download-progress', function (progressObj) {
-        let log_message = "Download speed: " + progressObj.bytesPerSecond;
-        log_message = log_message + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
-        log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-        sendStatusToWindow(log_message);
-    });
+    // autoUpdater.on('download-progress', function (progressObj) {
+    //     let log_message = "Download speed: " + progressObj.bytesPerSecond;
+    //     log_message = log_message + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
+    //     log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+    //     sendStatusToWindow(log_message);
+    // });
 
-    autoUpdater.on('update-downloaded', function (info) {
-        sendStatusToWindow('Update downloaded; will install in 1 seconds');
-    });
+    // autoUpdater.on('update-downloaded', function (info) {
+    //     sendStatusToWindow('Update downloaded; will install in 1 seconds');
+    // });
 
-    autoUpdater.on('update-downloaded', function (info) {
-        setTimeout(function () {
-            autoUpdater.quitAndInstall();
-        }, 1000);
-    });
+    // autoUpdater.on('update-downloaded', function (info) {
+    //     setTimeout(function () {
+    //         autoUpdater.quitAndInstall();
+    //     }, 1000);
+    // });
 
-    autoUpdater.checkForUpdates();
+    autoUpdater.checkForUpdatesAndNotify();
 
-    function sendStatusToWindow(message) {
-        let myNotification = new Notification('Title', {
-            body: message
-        })
-        myNotification.show();
-    }
+    // function sendStatusToWindow(message) {
+    //     let myNotification = new Notification('Title', {
+    //         body: message
+    //     })
+    //     myNotification.show();
+    // }
 }
 
 function initialize () {
