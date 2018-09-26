@@ -7,7 +7,7 @@ const request = require('request')
 const util = require('util')
 const {app} = require('electron')
 
-process.env.GH_TOKEN = '9d10732d6eb99a4b3428ca0f31d270c6c07fccb4'
+process.env.GH_TOKEN = '4dc8def4ce0cc1de76e131f29d3cfb00faed168b'
 const token = process.env.GH_TOKEN
 const version = require('../package').version
 const name = require('../package').name

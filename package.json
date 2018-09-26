@@ -1,7 +1,7 @@
 {
   "name": "cts-trading-helper",
   "productName": "CTS",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "CTS Trading Helper",
   "main": "main.js",
   "bin": "cli.js",
@@ -30,7 +30,7 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "https://github.com/Thienhuynh95/cts-trading-helper.git"
+        "url": "https://github.com/Thienhuynh95/cts-trading-helper"
       }
     ],
     "win": {
