@@ -1,6 +1,8 @@
 const binance = require('node-binance-api');
-let fs = require("fs");
+let fs = require("fs-extra");
+let path_func = require("path");
 let func = require("./../class/func");
+let system = require("./../config/system");
 let {dialog} = require('electron')
 
 
@@ -8,6 +10,210 @@ class Robot{
 
     constructor(params = []) {
         this.path = (params['path'] != undefined) ? params['path'] : '';
+    }
+    async initFile(path, file){
+        try{
+            let exist = fs.pathExistsSync(`${path}/${file}`);
+            if (!exist){
+                await fs.ensureDir(path).then(()=>{
+                    fs.writeFile(`${path}/${file}`, '{}')
+                }).catch(err=>{
+                    console.log(err);
+                })
+            }
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    tempDir(){
+        let tmp_arr = `${system['define']['root_path']}`.split('/');
+        tmp_arr.pop();
+        tmp_arr.push('CTS_tmp');
+        return tmp_arr.join('/');
+    }
+
+    tempExist(){
+        let tmp_arr = `${system['define']['root_path']}`.split('/');
+        tmp_arr.pop();
+        tmp_arr.push('CTS_tmp/user_api_config/user_api.txt');
+        let new_path = tmp_arr.join('/');
+        return fs.pathExistsSync(new_path);
+    }
+
+    move(from_dir, to_dir) {
+        return new Promise((resolve)=>{
+            var promiseAllWait = function(promises) {
+                // this is the same as Promise.all(), except that it will wait for all promises to fulfill before rejecting
+                let all_promises = [];
+                for(let i_promise=0; i_promise < promises.length; i_promise++) {
+                    all_promises.push(
+                        promises[i_promise]
+                        .then(function(res) {
+                            return { res: res };
+                        }).catch(function(err) {
+                            return { err: err };
+                        })
+                    );
+                }
+            
+                return Promise.all(all_promises)
+                .then(function(results) {
+                    return new Promise(function(resolve, reject) {
+                        var is_failure = false;
+                        var i_result;
+                        for(i_result=0; i_result < results.length; i_result++) {
+                            if (results[i_result].err) {
+                                is_failure = true;
+                                break;
+                            } else {
+                                results[i_result] = results[i_result].res;
+                            }
+                        }
+            
+                        if (is_failure) {
+                            reject( results[i_result].err );
+                        } else {
+                            resolve(results);
+                        }
+                    });
+                });
+            };
+            
+            var movePromiser = function(from, to, records) {
+                return fs.move(from, to, { overwrite: true })
+                .then(function() {
+                    records.push( {from: from, to: to} );
+                });
+            };
+            
+            var moveDir = function(from_dir, to_dir) {
+                return fs.readdir(from_dir)
+                .then(function(children) {
+                    return fs.ensureDir(to_dir)
+                    .then(function() {
+                        let move_promises = [];
+                        let moved_records = [];
+                        let child;
+                        for(let i_child=0; i_child < children.length; i_child++) {
+                            child = children[i_child];
+                            let sub_folder_arr = ['db'];
+                            move_promises.push(movePromiser(
+                                path_func.join(from_dir, child),
+                                path_func.join(to_dir, child),
+                                moved_records
+                            ));
+                            
+                        }
+            
+                        return promiseAllWait(move_promises)
+                        .catch(function(err) {
+                            let undo_move_promises = [];
+                            for(let i_moved_record=0; i_moved_record < moved_records.length; i_moved_record++) {
+                                undo_move_promises.push( fs.move(moved_records[i_moved_record].to, moved_records[i_moved_record].from) );
+                            }
+            
+                            return promiseAllWait(undo_move_promises)
+                            .then(function() {
+                                throw err;
+                            });
+                        });
+                    }).then(function() {
+                        resolve(1);
+                        return fs.rmdir(from_dir);
+                    });
+                });
+            };
+            moveDir(from_dir, to_dir);
+        })
+    }
+
+    copy(from_dir, to_dir) {
+        return new Promise((resolve)=>{
+            var promiseAllWait = function(promises) {
+                // this is the same as Promise.all(), except that it will wait for all promises to fulfill before rejecting
+                let all_promises = [];
+                for(let i_promise=0; i_promise < promises.length; i_promise++) {
+                    all_promises.push(
+                        promises[i_promise]
+                        .then(function(res) {
+                            return { res: res };
+                        }).catch(function(err) {
+                            return { err: err };
+                        })
+                    );
+                }
+            
+                return Promise.all(all_promises)
+                .then(function(results) {
+                    return new Promise(function(resolve, reject) {
+                        var is_failure = false;
+                        var i_result;
+                        for(i_result=0; i_result < results.length; i_result++) {
+                            if (results[i_result].err) {
+                                is_failure = true;
+                                break;
+                            } else {
+                                results[i_result] = results[i_result].res;
+                            }
+                        }
+            
+                        if (is_failure) {
+                            reject( results[i_result].err );
+                        } else {
+                            resolve(results);
+                        }
+                    });
+                });
+            };
+            
+            var movePromiser = function(from, to, records) {
+                return fs.copy(from, to, { overwrite: true })
+                .then(function() {
+                    records.push( {from: from, to: to} );
+                });
+            };
+            
+            var moveDir = function(from_dir, to_dir) {
+                return fs.readdir(from_dir)
+                .then(function(children) {
+                    return fs.ensureDir(to_dir)
+                    .then(function() {
+                        let move_promises = [];
+                        let moved_records = [];
+                        let child;
+                        for(let i_child=0; i_child < children.length; i_child++) {
+                            child = children[i_child];
+                            let sub_folder_arr = ['db'];
+                            move_promises.push(movePromiser(
+                                path_func.join(from_dir, child),
+                                path_func.join(to_dir, child),
+                                moved_records
+                            ));
+                            
+                        }
+            
+                        return promiseAllWait(move_promises)
+                        .catch(function(err) {
+                            let undo_move_promises = [];
+                            for(let i_moved_record=0; i_moved_record < moved_records.length; i_moved_record++) {
+                                undo_move_promises.push( fs.move(moved_records[i_moved_record].to, moved_records[i_moved_record].from) );
+                            }
+            
+                            return promiseAllWait(undo_move_promises)
+                            .then(function() {
+                                throw err;
+                            });
+                        });
+                    }).then(function() {
+                        resolve(1);
+                        return;
+                    });
+                });
+            };
+            moveDir(from_dir, to_dir);
+        })
     }
 
     randomString(length) {
@@ -18,6 +224,19 @@ class Robot{
           text += possible.charAt(Math.floor(Math.random() * possible.length));
       
         return text;
+    }
+
+    addPropertyChain(chain, val, obj) {
+        var propChain = chain.split(".");
+        if (propChain.length === 1) {
+            obj[propChain[0]] = val;
+            return;
+        }
+        var first = propChain.shift();
+        if (!obj[first]) {
+            obj[first] = {};
+        }
+        this.addPropertyChain(propChain.join("."), val, obj[first]);
     }
 
     testPropertyChain(chain, obj) {
@@ -321,19 +540,6 @@ class Robot{
 
             }, time_save * 1000);
         }, time_reset);
-    }
-
-    async addPropertyChain(chain, val, obj) {
-        var propChain = chain.split(".");
-        if (propChain.length === 1) {
-            obj[propChain[0]] = val;
-            return;
-        }
-        var first = propChain.shift();
-        if (!obj[first]) {
-            obj[first] = {};
-        }
-        this.addPropertyChain(propChain.join("."), val, obj[first]);
     }
 
     async readFileOnLy(path) {

@@ -1,4 +1,3 @@
-let {ipcRenderer} = require('electron');
 
 $(function(){
     load();
@@ -6,9 +5,6 @@ $(function(){
 
     function load(){
         ipcRenderer.send('get_app_notify', {});
-        // $('#update').click(()=>{
-        //     autoUpdater.checkForUpdates();
-        // })
     }
     
     function init_action(){

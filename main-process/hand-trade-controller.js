@@ -7,7 +7,7 @@ let path = require('path')
 
 let PouchDB = require('pouchdb');
 PouchDB.plugin(require('pouchdb-find'));
-let db = new PouchDB('db', {auto_compaction: true});
+let db = new PouchDB(`${system['define']['root_path']}/${system['define']['release_path']}/public/themes/electron/assets/data/db`, {auto_compaction: true});
 db.createIndex({
     index: {fields: ['id', 'collection']},
 });

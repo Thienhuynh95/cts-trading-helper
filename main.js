@@ -13,58 +13,109 @@ const resource = require('./config/resource')
 const menu = require('./config/menu')
 const views = require('./config/views')
 const system = require('./config/system')
-const {app, BrowserWindow, dialog, Notification} = require('electron')
+const fs = require('fs-extra')
+// const mv = require('mv');
+const {app, BrowserWindow, dialog, Notification, ipcMain} = require('electron')
 const updater = require("electron-updater");
+const robot = require("./class/Robot");
+let Robot = new robot();
+let PouchDB = require('pouchdb');
+
 const autoUpdater = updater.autoUpdater;
+autoUpdater.autoDownload = false;
 
 const debug = /--debug/.test(process.argv[2])
 
 let mainWindow = null
-update();
+
 function update(){
+    let info = {};
+    let first_request = true;
     
+    ipcMain.on('update-request-info', (event, data)=>{        
+        // Robot.ensureExists('./../test', function(err) {
+        //     if (err){
+        //         console.log(err);
+        //     }
+        //     else {
+        
+        //     }
+        // });
 
-    // autoUpdater.on('checking-for-update', function () {
-    //     sendStatusToWindow('Checking for update...');
-    // });
+        autoUpdater.on('checking-for-update', function () {
+            sendStatusToWindow('Checking for update...');
+        });
 
-    // autoUpdater.on('update-available', function (info) {
-    //     sendStatusToWindow('Update available.');
-    // });
+        autoUpdater.checkForUpdates().then((inform) => {
+            if (autoUpdater.isUpdateAvailable) {
+                info = inform;
+                sendStatusToWindow(inform);
+                sendStatusToWindow('Update available');
+            } else {
+                sendStatusToWindow('Update not available');
+            }
+        }).catch((error) => {
+            if (isNetworkError(error)) {
+                sendStatusToWindow('Network Error');
+            } else {
+                sendStatusToWindow('Unknown Error');
+                sendStatusToWindow(error);
+            }
+        });
+    
+        function sendStatusToWindow(message) {
+            let myNotification = new Notification('Title', {
+                body: message + ''
+            })
+            event.sender.send('update-request-info-return', message);
+            myNotification.show();
+        }
+    })
 
-    // autoUpdater.on('update-not-available', function (info) {
-    //     sendStatusToWindow('Update not available.');
-    // });
+    ipcMain.on('update-request', (event, data)=>{
+        if (info.cancellationToken){
+            autoUpdater.downloadUpdate(info.cancellationToken).then(async (file) => {
+                await Robot.copy(`${system['define']['root_path']}/${system['define']['release_path']}/public/themes/electron/assets/data`, Robot.tempDir());
+                autoUpdater.quitAndInstall();
+            }).catch((error) => {
+                if (isNetworkError(error)) {
+                    sendStatusToWindow('Network Error');
+                } else {
+                    sendStatusToWindow('Unknown Error');
+                    sendStatusToWindow(error);
+                }
+            });
+        }
 
-    // autoUpdater.on('error', function (err) {
-    //     sendStatusToWindow('Error in auto-updater.');
-    // });
+        autoUpdater.on('download-progress', function (progressObj) {
+            try{
+                let log_message = "Download speed: " + progressObj.bytesPerSecond;
+                log_message = log_message + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
+                log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+                sendStatusToWindow(log_message);
+            }
+            catch(err){
+                sendStatusToWindow(err);
+            }
+        });
 
-    // autoUpdater.on('download-progress', function (progressObj) {
-    //     let log_message = "Download speed: " + progressObj.bytesPerSecond;
-    //     log_message = log_message + ' - Downloaded ' + parseInt(progressObj.percent) + '%';
-    //     log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-    //     sendStatusToWindow(log_message);
-    // });
+        function sendStatusToWindow(message) {
+            let myNotification = new Notification('Title', {
+                body: message + ''
+            })
+            event.sender.send('update-request-return', message);
+            myNotification.show();
+        }
+    })
 
-    // autoUpdater.on('update-downloaded', function (info) {
-    //     sendStatusToWindow('Update downloaded; will install in 1 seconds');
-    // });
-
-    // autoUpdater.on('update-downloaded', function (info) {
-    //     setTimeout(function () {
-    //         autoUpdater.quitAndInstall();
-    //     }, 1000);
-    // });
-
-    autoUpdater.checkForUpdatesAndNotify();
-
-    // function sendStatusToWindow(message) {
-    //     let myNotification = new Notification('Title', {
-    //         body: message
-    //     })
-    //     myNotification.show();
-    // }
+    function isNetworkError(errorObject) {
+        return errorObject.message === "net::ERR_INTERNET_DISCONNECTED" ||
+            errorObject.message === "net::ERR_PROXY_CONNECTION_FAILED" ||
+            errorObject.message === "net::ERR_CONNECTION_RESET" ||
+            errorObject.message === "net::ERR_CONNECTION_CLOSE" ||
+            errorObject.message === "net::ERR_NAME_NOT_RESOLVED" ||
+            errorObject.message === "net::ERR_CONNECTION_TIMED_OUT";
+    }
 }
 
 function initialize () {
@@ -141,7 +192,8 @@ function initialize () {
 
   app.on('ready', () => {
     createWindow()
-    autoUpdater.checkForUpdates();
+    
+    update();
   })
 
   app.on('window-all-closed', () => {
@@ -176,7 +228,15 @@ function makeSingleInstance () {
 }
 
 // Require each JS file in the main-process dir
-function load() {
+async function load() {
+    if (Robot.tempExist()){
+        Robot.move(Robot.tempDir(), `${system['define']['root_path']}/${system['define']['release_path']}/public/themes/electron/assets/data`);
+    }
+    else{
+        await Robot.initFile('./public/themes/electron/assets/data/user_api_config', 'user_api.txt')
+        await Robot.initFile('./public/themes/electron/assets/data/user_hand_trading', 'u_100001.txt')
+    }
+    
     let filesArr = [
         glob.sync(path.join(__dirname, 'main-process/*.js')),
         glob.sync(path.join(__dirname, 'robot/*.js'))

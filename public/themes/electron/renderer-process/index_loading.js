@@ -1,13 +1,33 @@
-const {app, dialog} = require('electron').remote;
+let {app, dialog} = require('electron').remote;
+let {ipcRenderer} = require('electron');
+
 $(()=>{
     init();
 
     function init(){
         // menuSetting();
-    
+        update_request();
         // change app title
-        console.log(app.getName());
-        $('.nav-header .nav-title').html(`<b class="text-35 color-white text-w700">${app.getName()} </b><span class="text-yellow text-13 text-w600 text-lower">v${app.getVersion()}</span>`);
+        $('.nav-header .nav-title').html(`<b class="text-35 color-white text-w700">${app.getName()} </b><span class="text-yellow text-13 text-w600 text-lower"></span>`);
+        $('.about-version').html(`v${app.getVersion()}`);
+    }
+
+    function update_request(){
+        
+        ipcRenderer.send('update-request-info', {});
+        ipcRenderer.on('update-request-info-return', (event, data)=>{
+            let info = data;
+            if (info['versionInfo']){
+                let version = info['versionInfo']['version'];
+                $('#update').html(`UPDATE v${version}`).removeClass('hidden');
+            }
+        })
+        $('#update').click(()=>{
+            ipcRenderer.send('update-request', {});
+            ipcRenderer.on('update-request-return', (event, data)=>{
+                console.log(data);
+            })
+        })
     }
     
     function menuSetting(){
