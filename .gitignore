@@ -4,3 +4,4 @@ npm-debug.log
 public/themes/electron/assets/data/*
 dist
 script
+test
